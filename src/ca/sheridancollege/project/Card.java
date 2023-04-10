@@ -11,7 +11,7 @@ package ca.sheridancollege.project;
  * @author dancye
  * @author Brandon Yaeck, April 2023
  */
-public class Card {
+public class Card implements Comparable<Card> {
 	//default modifier for child classes
 	public enum Suit {HEARTS, DIAMONDS, CLUBS, SPADES};
 
@@ -38,18 +38,9 @@ public class Card {
 		return suit;
 	}
 
-	public void setSuit(Suit suit) {
-		this.suit = suit;
-	}
-
 	public Rank getRank() {
 		return rank;
 	}
-
-	public void setRank(Rank rank) {
-		this.rank = rank;
-	}
-	
 	/**
 	 *
 	 * @return a String representation of a card.
@@ -59,4 +50,20 @@ public class Card {
 		return rank + " of " + suit;
 	}
 
+	/**
+	 * Compare the value of cards.
+	 *
+	 * @param card
+	 * @return.
+	 */
+	@Override
+	public int compareTo(Card card) {
+		if (rank.value < card.getRank().value) {
+			return -1;
+		} else if (rank == card.getRank()) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
 }

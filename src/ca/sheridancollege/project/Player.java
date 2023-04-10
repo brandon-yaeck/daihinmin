@@ -16,6 +16,7 @@ public class Player {
 
 	private String name; //the unique name for this player
 	private PlayerRank rank; //the current rank of the player
+	private Hand hand = new Hand();
 
 	public enum PlayerRank {DAIHINMIN, HINMIN, HEIMIN, FUGOU, DAIFUGOU};
 
@@ -24,9 +25,9 @@ public class Player {
 	 *
 	 * @param name the unique ID to assign to this player.
 	 */
-	public Player(String name, PlayerRank rank) {
+	public Player(String name) {
 		this.name = name;
-		this.rank = rank;
+		rank = PlayerRank.HEIMIN;
 	}
 
 	/**
@@ -51,6 +52,10 @@ public class Player {
 
 	public void setRank(PlayerRank rank) {
 		this.rank = rank;
+	}
+
+	public Hand getHand() {
+		return hand;
 	}
 
 	/**

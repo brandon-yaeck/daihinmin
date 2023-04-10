@@ -12,17 +12,21 @@ package ca.sheridancollege.project;
  * @author Paul Bonenfant Jan 2020
  * @author Brandon Yaeck, April 2023
  */
-public abstract class Player {
+public class Player {
 
 	private String name; //the unique name for this player
+	private PlayerRank rank; //the current rank of the player
+
+	public enum PlayerRank {DAIHINMIN, HINMIN, HEIMIN, FUGOU, DAIFUGOU};
 
 	/**
 	 * A constructor that allows you to set the player's unique ID
 	 *
 	 * @param name the unique ID to assign to this player.
 	 */
-	public Player(String name) {
+	public Player(String name, PlayerRank rank) {
 		this.name = name;
+		this.rank = rank;
 	}
 
 	/**
@@ -41,9 +45,19 @@ public abstract class Player {
 		this.name = name;
 	}
 
+	public PlayerRank getRank() {
+		return rank;
+	}
+
+	public void setRank(PlayerRank rank) {
+		this.rank = rank;
+	}
+
 	/**
 	 * The method to be overridden when you subclass the Player class with your specific type of Player and filled in with logic to play your game.
 	 */
-	public abstract void play();
+	public void play() {
+
+	}
 
 }

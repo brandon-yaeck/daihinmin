@@ -5,20 +5,11 @@ package ca.sheridancollege.project;
  *
  * @author Brandon Yaeck, April 2023
  */
-public class PlayArea {
+public class PlayArea extends GroupOfCards {
 
 	private static PlayArea onlyObject = null;
-	private GroupOfCards cards = new GroupOfCards();
 
 	private PlayArea() {
-	}
-
-	public GroupOfCards getCards() {
-		return cards;
-	}
-
-	public void clearPlay() {
-		cards.clearCards();
 	}
 
 	public static PlayArea getInstance() {

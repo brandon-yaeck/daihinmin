@@ -24,6 +24,7 @@ public class Player {
 	 * A constructor that allows you to set the player's unique ID
 	 *
 	 * @param name the unique ID to assign to this player.
+	 * HEIMIN is the starting rank for all players
 	 */
 	public Player(String name) {
 		this.name = name;

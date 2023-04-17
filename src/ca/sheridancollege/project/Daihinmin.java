@@ -160,6 +160,11 @@ public class Daihinmin extends Game {
 				//get the trick size to be used for the trick if field is empty and player has a trick size greater than 1
 				if (playArea.getCards().isEmpty() && maxTrickSize > 1) {
 					trickSize = getTrickSize(maxTrickSize, currentPlayer.getName());
+
+					// reset pass count to 0 whenever the player picks a trick size
+					// this is to prevent a crash if all 4 players pick a trick size and then pass without playing
+					// no one will have ever played so lastPlay will be null
+					passCount = 0;
 				} 
 
 				// player plays

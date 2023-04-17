@@ -51,14 +51,12 @@ public class Daihinmin extends Game {
 		int i = 0;
 		// iterate through every card in deck
 		for (Card card: deck.getCards()) {
-			// go to next player after each loop
-			if (i < players.size()) {
-				players.get(i).getHand().getCards().add(card);
-				i++;
-			} else {
 			// go back to first player after last player
+			if (i == players.size()) {
 				i = 0;
 			}
+			players.get(i).getHand().getCards().add(card);
+			i++;
 		}
 	}
 
@@ -78,6 +76,10 @@ public class Daihinmin extends Game {
 
 			// force card trading here if required ranks exist
 			forceCardSwap();
+
+			System.out.println("----------------------------");
+			System.out.println("Beginning round " + round);
+			System.out.println("----------------------------");
 
 			// begin the round
 			playRound();
@@ -100,20 +102,6 @@ public class Daihinmin extends Game {
 		while (true) {
 			currentPlayer = players.get(i);
 
-			// check if round is over
-			if (roundRanking.size() == players.size() - 1) {
-				// rank the last remaining player
-				roundRanking.add(currentPlayer);
-
-				// process final round rankings
-				rankPlayers(roundRanking);
-
-				// clean up
-				currentPlayer.getHand().clearCards();
-				playArea.clearCards();
-
-				break;
-			}
 
 
 			// check for trick end if all players pass
@@ -140,6 +128,22 @@ public class Daihinmin extends Game {
 
 			// if last card was a 2 or hand empty then auto pass
 			if (lastCard != Card.Rank.TWO && !currentPlayer.getHand().getCards().isEmpty()) {
+
+				// check if round is over
+				// NOTE: this must be in this loop to ensure the last player getting added to the rankings is the one without an empty hand
+				if (roundRanking.size() == players.size() - 1) {
+					// rank the last remaining player
+					roundRanking.add(currentPlayer);
+
+					// process final round rankings
+					rankPlayers(roundRanking);
+
+					// clean up
+					currentPlayer.getHand().clearCards();
+					playArea.clearCards();
+
+					break;
+				}
 
 				currentPlayer.getHand().sortHand();
 
@@ -207,6 +211,7 @@ public class Daihinmin extends Game {
 		System.out.println("New player rankings:");
 		System.out.println();
 
+
 		// can't loop, bottom 2 players must always be last 2 ranks as player count might not line up with rank count
 		roundRanking.get(0).setRank(Player.PlayerRank.DAIFUGOU);
 		roundRanking.get(1).setRank(Player.PlayerRank.FUGOU);
@@ -234,6 +239,7 @@ public class Daihinmin extends Game {
 			ArrayList<Card> hinmin = players.get(players.size() - 2).getHand().getCards();
 			ArrayList<Card> daihinmin = players.get(players.size() - 1).getHand().getCards();
 
+
 			ArrayList<Card> selectedCards = new ArrayList<>();
 
 
@@ -255,6 +261,7 @@ public class Daihinmin extends Game {
 
 			GroupOfCardsView.show("Daifugou's hand", daifugou);
 
+			// BUG here: user can put the same card twice
 			System.out.println("(Daifugou) Enter two card numbers from the list to give away (starting from 0): ");
 			while (selectedCards.size() < 2) {
 				try {
@@ -293,7 +300,7 @@ public class Daihinmin extends Game {
 
 			GroupOfCardsView.show("Fugou's hand", fugou);
 
-			System.out.println("(Daifugou) Enter two card numbers from the list to give away (starting from 0): ");
+			System.out.println("(Fugou) Enter one card number from the list to give away (starting from 0): ");
 			while (selectedCards.size() < 1) {
 				try {
 					int selectedIndex = Integer.parseInt(keyboard.nextLine());
@@ -301,7 +308,7 @@ public class Daihinmin extends Game {
 						throw new IllegalArgumentException("Selection must be between 0 and " + (fugou.size() - 1) + ".");
 					}
 					else {
-						selectedCards.add(daifugou.get(selectedIndex));
+						selectedCards.add(fugou.get(selectedIndex));
 					}
 				}
 				catch (NumberFormatException exception) {

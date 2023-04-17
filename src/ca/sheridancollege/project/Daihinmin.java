@@ -73,11 +73,11 @@ public class Daihinmin extends Game {
 
 	public void play(int totalRounds) {
 		while (round <= totalRounds) {
-			// force card trading here if required ranks exist
-			forceCardSwap();
-
 			// deal to each player
 			deal();
+
+			// force card trading here if required ranks exist
+			forceCardSwap();
 
 			// begin the round
 			playRound();
@@ -224,7 +224,97 @@ public class Daihinmin extends Game {
 	}
 
 	public void forceCardSwap() {
+		Scanner keyboard = new Scanner(System.in);
 
+		// daifugou is always moved to first element after ranking
+		// if not then it's first round and everyone is heimin still
+		if (players.get(0).getRank() == Player.PlayerRank.DAIFUGOU) {
+			ArrayList<Card> daifugou = players.get(0).getHand().getCards();
+			ArrayList<Card> fugou = players.get(1).getHand().getCards();
+			ArrayList<Card> hinmin = players.get(players.size() - 2).getHand().getCards();
+			ArrayList<Card> daihinmin = players.get(players.size() - 1).getHand().getCards();
+
+			ArrayList<Card> selectedCards = new ArrayList<>();
+
+
+			System.out.println("The daihinmin must give their best two cards to the daifugou as tax.");
+
+			Collections.sort(daihinmin);
+
+			// last card in sorted hand will be the highest rank
+			daifugou.add(daihinmin.get(daihinmin.size() - 1));
+			daihinmin.remove(daihinmin.size() - 1);
+
+			daifugou.add(daihinmin.get(daihinmin.size() - 1));
+			daihinmin.remove(daihinmin.size() - 1);
+
+
+			System.out.println("The daifugou must return two cards of choice.");
+
+			Collections.sort(daifugou);
+
+			GroupOfCardsView.show("Daifugou's hand", daifugou);
+
+			System.out.println("(Daifugou) Enter two card numbers from the list to give away (starting from 0): ");
+			while (selectedCards.size() < 2) {
+				try {
+					int selectedIndex = Integer.parseInt(keyboard.nextLine());
+					if (selectedIndex < 0 || selectedIndex > daifugou.size() - 1) {
+						throw new IllegalArgumentException("Selection must be between 0 and " + (daifugou.size() - 1) + ".");
+					}
+					else {
+						selectedCards.add(daifugou.get(selectedIndex));
+					}
+				}
+				catch (NumberFormatException exception) {
+					System.out.printf("You must enter a number.\n");
+				}
+				catch (IllegalArgumentException exception) {
+					System.out.printf("%s\n", exception.getMessage());
+				}
+			}
+			daihinmin.addAll(selectedCards);
+			daifugou.removeAll(selectedCards);
+			selectedCards.clear();
+
+
+			System.out.println("The hinmin must give their best card to the fugou as tax.");
+
+			Collections.sort(hinmin);
+
+			// last card in sorted hand will be the highest rank
+			fugou.add(hinmin.get(hinmin.size() - 1));
+			hinmin.remove(hinmin.size() - 1);
+
+
+			System.out.println("The fugou must return one card of choice.");
+
+			Collections.sort(fugou);
+
+			GroupOfCardsView.show("Fugou's hand", fugou);
+
+			System.out.println("(Daifugou) Enter two card numbers from the list to give away (starting from 0): ");
+			while (selectedCards.size() < 1) {
+				try {
+					int selectedIndex = Integer.parseInt(keyboard.nextLine());
+					if (selectedIndex < 0 || selectedIndex > fugou.size() - 1) {
+						throw new IllegalArgumentException("Selection must be between 0 and " + (fugou.size() - 1) + ".");
+					}
+					else {
+						selectedCards.add(daifugou.get(selectedIndex));
+					}
+				}
+				catch (NumberFormatException exception) {
+					System.out.printf("You must enter a number.\n");
+				}
+				catch (IllegalArgumentException exception) {
+					System.out.printf("%s\n", exception.getMessage());
+				}
+			}
+			hinmin.addAll(selectedCards);
+			fugou.removeAll(selectedCards);
+			selectedCards.clear();
+		}
 	}
 
 	/**

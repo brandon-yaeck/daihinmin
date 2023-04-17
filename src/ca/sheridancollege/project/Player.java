@@ -12,13 +12,22 @@ package ca.sheridancollege.project;
  * @author Paul Bonenfant Jan 2020
  * @author Brandon Yaeck, April 2023
  */
-public class Player {
+public class Player implements Comparable<Player> {
 
 	private String name; //the unique name for this player
 	private PlayerRank rank; //the current rank of the player
 	private Hand hand = new Hand();
 
-	public enum PlayerRank {DAIHINMIN, HINMIN, HEIMIN, FUGOU, DAIFUGOU};
+	// daihinmin is the lowest, daifugou is the highest
+	public enum PlayerRank {
+		DAIHINMIN(1), HINMIN(2), HEIMIN(3), FUGOU(4), DAIFUGOU(5);
+
+		public final int value;
+
+		private PlayerRank(int value) {
+			this.value = value;
+		}
+	};
 
 	/**
 	 * A constructor that allows you to set the player's unique ID
@@ -64,6 +73,23 @@ public class Player {
 	 */
 	public void play() {
 
+	}
+
+	/**
+	 * Compare the ranks of players.
+	 *
+	 * @param card
+	 * @return.
+	 */
+	@Override
+	public int compareTo(Player player) {
+		if (rank.value < player.getRank().value) {
+			return -1;
+		} else if (rank == player.getRank()) {
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 
 }

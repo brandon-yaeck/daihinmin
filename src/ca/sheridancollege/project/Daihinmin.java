@@ -231,6 +231,7 @@ public class Daihinmin extends Game {
 		for (Player player: players) {
 			System.out.printf("%s: %s\n", player.getName(), player.getRank());
 		}
+		System.out.println();
 	}
 
 	public void forceCardSwap() {

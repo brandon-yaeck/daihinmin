@@ -66,4 +66,12 @@ public class Card implements Comparable<Card> {
 			return 1;
 		}
 	}
+	
+	public boolean checkMatch(Card card) {
+		if (card != null) {
+			return (compareTo(card) == 0);
+		} else {
+			return false;
+		}
+	}
 }

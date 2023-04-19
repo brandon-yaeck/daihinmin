@@ -77,7 +77,7 @@ public class Hand extends GroupOfCards {
 		Card previousCard = null;
 		int duplicateCount = 0;
 		for (Card card: cards) {
-			if (previousCard != null && card.compareTo(previousCard) == 0) {
+			if (card.checkMatch(previousCard)) {
 				switch (duplicateCount) {
 					case 0:
 						addDoubles(card.getRank());

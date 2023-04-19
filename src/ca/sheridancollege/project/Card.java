@@ -69,9 +69,13 @@ public class Card implements Comparable<Card> {
 	
 	public boolean checkMatch(Card card) {
 		if (card != null) {
-			return (compareTo(card) == 0);
+			return compareTo(card) == 0;
 		} else {
 			return false;
 		}
+	}
+
+	public boolean checkMatch(Rank rank) {
+		return this.rank == rank;
 	}
 }

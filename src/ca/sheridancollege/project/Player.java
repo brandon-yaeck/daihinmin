@@ -115,7 +115,7 @@ public class Player implements Comparable<Player> {
 							// find card in hand that matches
 							int matchAmount = 0;
 							for (Card card: hand.getCards()) {
-								if (card.getRank() == selection) {
+								if (card.checkMatch(selection)) {
 									playArea.add(card);
 									matchAmount++;	
 								}

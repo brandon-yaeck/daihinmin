@@ -149,17 +149,18 @@ public class Daihinmin extends Game {
 
 				// show playing field:
 				// NOTE: playing field never needs to be sorted as cards are always added in ascending order
-				GroupOfCardsView.show("Playing Field", playArea.getCards());
+				playArea.show("Playing Field");
 
 				// show current player's hand
-				GroupOfCardsView.show(currentPlayer.getName() + "'s hand", currentPlayer.getHand().getCards());
+				currentPlayer.getHand().show(currentPlayer.getName() + "'s hand");
 
 				//determine available trick sizes in the current hand and get the max size
 				int maxTrickSize = currentPlayer.getHand().getTrickSizes();
 
 				//get the trick size to be used for the trick if field is empty and player has a trick size greater than 1
 				if (playArea.getCards().isEmpty() && maxTrickSize > 1) {
-					trickSize = getTrickSize(maxTrickSize, currentPlayer.getName());
+					System.out.printf("(%s) Enter amount of cards to play [1 - %d]: ", currentPlayer.getName(), maxTrickSize);
+					trickSize = getTrickSize(maxTrickSize);
 
 					// reset pass count to 0 whenever the player picks a trick size
 					// this is to prevent a crash if all 4 players pick a trick size and then pass without playing
@@ -235,98 +236,28 @@ public class Daihinmin extends Game {
 	}
 
 	public void forceCardSwap() {
-		Scanner keyboard = new Scanner(System.in);
+		int amount = 0;
 
 		// daifugou is always moved to first element after ranking
 		// if not then it's first round and everyone is heimin still
 		if (players.get(0).getRank() == Player.PlayerRank.DAIFUGOU) {
-			ArrayList<Card> daifugou = players.get(0).getHand().getCards();
-			ArrayList<Card> fugou = players.get(1).getHand().getCards();
-			ArrayList<Card> hinmin = players.get(players.size() - 2).getHand().getCards();
-			ArrayList<Card> daihinmin = players.get(players.size() - 1).getHand().getCards();
-
-
-			ArrayList<Card> selectedCards = new ArrayList<>();
+			Hand daifugou = players.get(0).getHand();
+			Hand fugou = players.get(1).getHand();
+			Hand hinmin = players.get(players.size() - 2).getHand();
+			Hand daihinmin = players.get(players.size() - 1).getHand();
 
 
 			System.out.println("The daihinmin must give their best two cards to the daifugou as tax.");
+			daihinmin.swapCardsUp(daifugou, 2);
 
-			Collections.sort(daihinmin);
-
-			// last card in sorted hand will be the highest rank
-			daifugou.add(daihinmin.get(daihinmin.size() - 1));
-			daihinmin.remove(daihinmin.size() - 1);
-
-			daifugou.add(daihinmin.get(daihinmin.size() - 1));
-			daihinmin.remove(daihinmin.size() - 1);
-
-
-			System.out.println("The daifugou must return two cards of choice.");
-
-			Collections.sort(daifugou);
-
-			GroupOfCardsView.show("Daifugou's hand", daifugou);
-
-			// BUG here: user can put the same card twice
-			System.out.println("(Daifugou) Enter two card numbers from the list to give away (starting from 0): ");
-			while (selectedCards.size() < 2) {
-				try {
-					int selectedIndex = Integer.parseInt(keyboard.nextLine());
-					if (selectedIndex < 0 || selectedIndex > daifugou.size() - 1) {
-						throw new IllegalArgumentException("Selection must be between 0 and " + (daifugou.size() - 1) + ".");
-					}
-					else {
-						selectedCards.add(daifugou.get(selectedIndex));
-					}
-				}
-				catch (NumberFormatException exception) {
-					System.out.printf("You must enter a number.\n");
-				}
-				catch (IllegalArgumentException exception) {
-					System.out.printf("%s\n", exception.getMessage());
-				}
-			}
-			daihinmin.addAll(selectedCards);
-			daifugou.removeAll(selectedCards);
-			selectedCards.clear();
-
+			System.out.println("The daifugou must return 2 cards of choice.");
+			daifugou.swapCardsDown(daihinmin, 2);
 
 			System.out.println("The hinmin must give their best card to the fugou as tax.");
+			hinmin.swapCardsUp(fugou, 1);
 
-			Collections.sort(hinmin);
-
-			// last card in sorted hand will be the highest rank
-			fugou.add(hinmin.get(hinmin.size() - 1));
-			hinmin.remove(hinmin.size() - 1);
-
-
-			System.out.println("The fugou must return one card of choice.");
-
-			Collections.sort(fugou);
-
-			GroupOfCardsView.show("Fugou's hand", fugou);
-
-			System.out.println("(Fugou) Enter one card number from the list to give away (starting from 0): ");
-			while (selectedCards.size() < 1) {
-				try {
-					int selectedIndex = Integer.parseInt(keyboard.nextLine());
-					if (selectedIndex < 0 || selectedIndex > fugou.size() - 1) {
-						throw new IllegalArgumentException("Selection must be between 0 and " + (fugou.size() - 1) + ".");
-					}
-					else {
-						selectedCards.add(fugou.get(selectedIndex));
-					}
-				}
-				catch (NumberFormatException exception) {
-					System.out.printf("You must enter a number.\n");
-				}
-				catch (IllegalArgumentException exception) {
-					System.out.printf("%s\n", exception.getMessage());
-				}
-			}
-			hinmin.addAll(selectedCards);
-			fugou.removeAll(selectedCards);
-			selectedCards.clear();
+			System.out.println("The fugou must return 1 card of choice.");
+			fugou.swapCardsDown(daihinmin, 1);
 		}
 	}
 
@@ -343,12 +274,11 @@ public class Daihinmin extends Game {
 		System.out.println();
 	}
 
-	public int getTrickSize(int maxTrickSize, String playerName) {
+	public int getTrickSize(int maxTrickSize) {
 		Scanner keyboard = new Scanner(System.in);
 		int trickSize = 1;
 
 		while (true) {
-			System.out.printf("(%s) Enter amount of cards to play [1 - %d]: ", playerName, maxTrickSize);
 			try {
 				// choose trick size
 				trickSize = Integer.parseInt(keyboard.nextLine());

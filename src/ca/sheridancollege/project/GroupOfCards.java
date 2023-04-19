@@ -37,4 +37,12 @@ public class GroupOfCards {
 		cards.clear();
 	}
 
+	public void show(String message) {
+		System.out.printf("\n%s:\n", message);
+		for (Card card: cards) {
+			System.out.println(card);
+		}
+		System.out.println();
+	}
+
 }//end class

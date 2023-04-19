@@ -2,6 +2,7 @@ package ca.sheridancollege.project;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 /**
  *
@@ -69,6 +70,60 @@ public class Hand extends GroupOfCards {
 	public void clearCards() {
 		cards.clear();
 		clearRankLists();
+	}
+
+	public int lastCardIndex() {
+		return cards.size() - 1;
+	}
+
+	public boolean isValidIndex(int index) {
+		if (index < 0 || index > lastCardIndex()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public void swapCardsUp(Hand targetHand, int amount) {
+		// last card in sorted hand will be the highest rank
+		sortHand();
+
+		for (int i = 0; i < amount; i++) {
+			targetHand.getCards().add(cards.get(lastCardIndex()));
+			cards.remove(lastCardIndex());
+		}
+	}
+
+	public void swapCardsDown(Hand targetHand, int amount) {
+		Scanner keyboard = new Scanner(System.in);
+		ArrayList<Card> selectedCards = new ArrayList<>();
+
+		sortHand();
+
+		show("Hand");
+
+		System.out.printf("Enter %d card numbers from the list to give away (starting from 0):\n", amount);
+		// BUG here: user can put the same card twice
+		while (selectedCards.size() < amount) {
+			try {
+				int selectedIndex = Integer.parseInt(keyboard.nextLine());
+				if (!targetHand.isValidIndex(selectedIndex)) {
+					throw new IllegalArgumentException("Selection must be between 0 and " + (targetHand.lastCardIndex()) + ".");
+				}
+				else {
+					selectedCards.add(targetHand.getCards().get(selectedIndex));
+				}
+			}
+			catch (NumberFormatException exception) {
+				System.out.printf("You must enter a number.\n");
+			}
+			catch (IllegalArgumentException exception) {
+				System.out.printf("%s\n", exception.getMessage());
+			}
+		}
+		cards.addAll(selectedCards);
+		targetHand.getCards().removeAll(selectedCards);
+		selectedCards.clear();
 	}
 
 	public int getTrickSizes() {

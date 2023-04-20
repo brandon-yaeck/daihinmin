@@ -12,6 +12,11 @@ public class PlayArea extends GroupOfCards {
 	private PlayArea() {
 	}
 
+	/**
+	 * Singleton pattern instance creation.
+	 * 
+	 * @return the only instance of the play area
+	 */
 	public static PlayArea getInstance() {
 		if (onlyObject == null) {
 			onlyObject = new PlayArea();

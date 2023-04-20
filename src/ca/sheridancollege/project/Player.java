@@ -21,7 +21,11 @@ public class Player implements Comparable<Player> {
 	private PlayerRank rank; //the current rank of the player
 	private Hand hand = new Hand();
 
-	// daihinmin is the best, daifugou is the worst
+	/**
+	 * List of available ranks for each player.
+	 * given an integer value for comparison purposes.
+	 * daifugou is the best, daihinmin is the worst.
+	 */
 	public enum PlayerRank {
 		DAIFUGOU(1), FUGOU(2), HEIMIN(3), HINMIN(4), DAIHINMIN(5);
 
@@ -33,28 +37,20 @@ public class Player implements Comparable<Player> {
 	};
 
 	/**
-	 * A constructor that allows you to set the player's unique ID
+	 * A constructor that allows you to set the player's unique ID.
+	 * HEIMIN is the starting rank for all players
 	 *
 	 * @param name the unique ID to assign to this player.
-	 * HEIMIN is the starting rank for all players
 	 */
 	public Player(String name) {
 		this.name = name;
 		rank = PlayerRank.HEIMIN;
 	}
 
-	/**
-	 * @return the player name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * Ensure that the playerID is unique
-	 *
-	 * @param name the player name to set
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -71,6 +67,14 @@ public class Player implements Comparable<Player> {
 		return hand;
 	}
 
+	/**
+	 * Test whether a card is currently playable.
+	 * 
+	 * @param selection the rank of the card the player wishes to play
+	 * @param lastCard the rank of the last card that was played, new one must be higher
+	 * @param trickSize the trick size currently in play
+	 * @return boolean of whether it is playable
+	 */
 	public boolean isPlayable(int trickSize, Card.Rank selection, Card.Rank lastCard) {
 		ArrayList<Card.Rank> selectedRanks;
 		switch (trickSize) {
@@ -100,9 +104,10 @@ public class Player implements Comparable<Player> {
 	}
 
 	/**
-	 * The method to be overridden when you subclass the Player class with your specific type of Player and filled in with logic to play your game.
+	 * Player specific gameplay.
+	 * Prompts the player for the card they wish to play and tests its validity.
 	 * 
-	 * @return Whether a card was played
+	 * @return Whether a card was successfully played
 	 */
 	public boolean play(ArrayList<Card> playArea, int trickSize, Card.Rank lastCard) {
 		Scanner keyboard = new Scanner(System.in);
@@ -157,8 +162,8 @@ public class Player implements Comparable<Player> {
 	/**
 	 * Compare the ranks of players.
 	 *
-	 * @param card
-	 * @return.
+	 * @param player the player being compared with
+	 * @return standard Comparable interface values
 	 */
 	@Override
 	public int compareTo(Player player) {
@@ -170,5 +175,4 @@ public class Player implements Comparable<Player> {
 			return 1;
 		}
 	}
-
 }

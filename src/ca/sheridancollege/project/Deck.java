@@ -11,8 +11,10 @@ public class Deck extends GroupOfCards {
 
 	private static Deck onlyObject = null;
 
+	/**
+	 * Create a deck with one of each possible card combination.
+	 */
 	private Deck() {
-		// create a deck with one of each possible card combination
 		for (Card.Suit suit: Card.Suit.values()) {
 			for (Card.Rank rank: Card.Rank.values()) {
 				cards.add(new Card(suit, rank));
@@ -20,10 +22,19 @@ public class Deck extends GroupOfCards {
 		}
 	}
 	
+	/**
+	 * Shuffle the deck.
+	 * Used before dealing.
+	 */
 	public void shuffle() {
 		Collections.shuffle(cards);
 	}
 
+	/**
+	 * Singleton pattern instance creation.
+	 * 
+	 * @return the only instance of the deck
+	 */
 	public static Deck getInstance() {
 		if (onlyObject == null) {
 			onlyObject = new Deck();

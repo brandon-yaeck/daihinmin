@@ -41,8 +41,8 @@ public class Card implements Comparable<Card> {
 	public Rank getRank() {
 		return rank;
 	}
+
 	/**
-	 *
 	 * @return a String representation of a card.
 	 */
 	@Override
@@ -53,8 +53,8 @@ public class Card implements Comparable<Card> {
 	/**
 	 * Compare the value of cards.
 	 *
-	 * @param card
-	 * @return.
+	 * @param card the card being compared with
+	 * @return standard Comparable interface values
 	 */
 	@Override
 	public int compareTo(Card card) {
@@ -67,6 +67,12 @@ public class Card implements Comparable<Card> {
 		}
 	}
 	
+	/**
+	 * Check if two cards match using the comparable interface.
+	 *
+	 * @param card the card being checked for a match
+	 * @return whether they match
+	 */
 	public boolean checkMatch(Card card) {
 		if (card != null) {
 			return compareTo(card) == 0;
@@ -75,6 +81,13 @@ public class Card implements Comparable<Card> {
 		}
 	}
 
+	/**
+	 * Check if two cards match using the comparable interface.
+	 * alternate version using a card's rank directly
+	 *
+	 * @param rank the rank of the card being checked for a match
+	 * @return whether they match
+	 */
 	public boolean checkMatch(Rank rank) {
 		return this.rank == rank;
 	}

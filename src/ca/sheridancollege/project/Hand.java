@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.Scanner;
 
 /**
- *
+ * Models a player's hand of cards.
+ * 
  * @author Brandon Yaeck, April 2023
  */
 public class Hand extends GroupOfCards {
@@ -21,14 +22,17 @@ public class Hand extends GroupOfCards {
 		tripleCards = new ArrayList<>();
 		quadrupleCards = new ArrayList<>();
 	}
+
 	/**
-	 * Sorts the hand for visual clarity.
-	 * 
+	 * Sorts the hand.
 	 */
 	public void sortHand() {
 		Collections.sort(cards);
 	}
 
+	/**
+	 * Add all cards in hand to the list of single cards that can be played.
+	 */
 	public void addSingles() {
 		for (Card card: cards) {
 			singleCards.add(card.getRank());
@@ -38,6 +42,11 @@ public class Hand extends GroupOfCards {
 		return singleCards;
 	}
 
+	/**
+	 * Add certain card ranks in hand to the list of double cards that can be played.
+	 * 
+	 * @param rank the rank of card that was found to have a duplicate.
+	 */
 	public void addDoubles(Card.Rank rank) {
 		doubleCards.add(rank);
 	}
@@ -45,6 +54,11 @@ public class Hand extends GroupOfCards {
 		return doubleCards;
 	}
 
+	/**
+	 * Add certain card ranks in hand to the list of triple cards that can be played.
+	 * 
+	 * @param rank the rank of card that was found to have a duplicate.
+	 */
 	public void addTriples(Card.Rank rank) {
 		tripleCards.add(rank);
 	}
@@ -52,6 +66,11 @@ public class Hand extends GroupOfCards {
 		return tripleCards;
 	}
 
+	/**
+	 * Add certain card ranks in hand to the list of quadruple cards that can be played.
+	 * 
+	 * @param rank the rank of card that was found to have a duplicate.
+	 */
 	public void addQuadruples(Card.Rank rank) {
 		quadrupleCards.add(rank);
 	}
@@ -59,6 +78,11 @@ public class Hand extends GroupOfCards {
 		return quadrupleCards;
 	}
 
+	/**
+	 * Clear the duplicate rank lists.
+	 * 
+	 * Used for cleanup at the end of a turn.
+	 */
 	public void clearRankLists() {
 		singleCards.clear();
 		doubleCards.clear();
@@ -66,16 +90,32 @@ public class Hand extends GroupOfCards {
 		quadrupleCards.clear();
 	}
 
+	/**
+	 * Clear the hand of cards.
+	 * 
+	 * Used for cleanup at the end of a round.
+	 */
 	@Override
 	public void clearCards() {
 		cards.clear();
 		clearRankLists();
 	}
 
+	/**
+	 * Find the index of the last card in the player's hand.
+	 * 
+	 * @return The last index of the ArrayList.
+	 */
 	public int lastCardIndex() {
 		return cards.size() - 1;
 	}
 
+	/**
+	 * Test whether a specified index is valid in the player's hand.
+	 * 
+	 * @param index specified index
+	 * @return true or false
+	 */
 	public boolean isValidIndex(int index) {
 		if (index < 0 || index > lastCardIndex()) {
 			return false;
@@ -84,6 +124,12 @@ public class Hand extends GroupOfCards {
 		}
 	}
 
+	/**
+	 * Give cards to a higher ranked player.
+	 * 
+	 * @param amount number of cards being swapped
+	 * @param targetHand hand of the player that the cards are being given to.
+	 */
 	public void swapCardsUp(Hand targetHand, int amount) {
 		// last card in sorted hand will be the highest rank
 		sortHand();
@@ -94,6 +140,12 @@ public class Hand extends GroupOfCards {
 		}
 	}
 
+	/**
+	 * Give cards to a lower ranked player.
+	 * 
+	 * @param amount number of cards being swapped
+	 * @param targetHand hand of the player that the cards are being given to.
+	 */
 	public void swapCardsDown(Hand targetHand, int amount) {
 		Scanner keyboard = new Scanner(System.in);
 		ArrayList<Card> selectedCards = new ArrayList<>();
@@ -126,8 +178,12 @@ public class Hand extends GroupOfCards {
 		selectedCards.clear();
 	}
 
+	/**
+	 * Determine which trick sizes are possible in the current hand.
+	 * 
+	 * @return the maximum trick size number
+	 */
 	public int getTrickSizes() {
-		//determine available trick sizes in the current hand
 		// previousCard stores the last one checked in the hand to check for duplicates
 		Card previousCard = null;
 		int duplicateCount = 0;

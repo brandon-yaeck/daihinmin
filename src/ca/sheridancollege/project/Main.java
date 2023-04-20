@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
+ * Main class used to launch the program and set up a game.
  *
  * @author Brandon Yaeck, April 2023
  */

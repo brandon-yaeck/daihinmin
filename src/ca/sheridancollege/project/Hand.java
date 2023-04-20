@@ -102,16 +102,16 @@ public class Hand extends GroupOfCards {
 
 		show("Hand");
 
-		System.out.printf("Enter %d card numbers from the list to give away (starting from 0):\n", amount);
+		System.out.printf("Enter %d card numbers from the list to return (starting from 0):\n", amount);
 		// BUG here: user can put the same card twice
 		while (selectedCards.size() < amount) {
 			try {
 				int selectedIndex = Integer.parseInt(keyboard.nextLine());
-				if (!targetHand.isValidIndex(selectedIndex)) {
-					throw new IllegalArgumentException("Selection must be between 0 and " + (targetHand.lastCardIndex()) + ".");
+				if (!isValidIndex(selectedIndex)) {
+					throw new IllegalArgumentException("Selection must be between 0 and " + (lastCardIndex()) + ".");
 				}
 				else {
-					selectedCards.add(targetHand.getCards().get(selectedIndex));
+					selectedCards.add(cards.get(selectedIndex));
 				}
 			}
 			catch (NumberFormatException exception) {
@@ -121,8 +121,8 @@ public class Hand extends GroupOfCards {
 				System.out.printf("%s\n", exception.getMessage());
 			}
 		}
-		cards.addAll(selectedCards);
-		targetHand.getCards().removeAll(selectedCards);
+		targetHand.getCards().addAll(selectedCards);
+		cards.removeAll(selectedCards);
 		selectedCards.clear();
 	}
 

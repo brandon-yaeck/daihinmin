@@ -147,7 +147,7 @@ public class Player implements Comparable<Player> {
 				}
 			}
 			catch (IllegalArgumentException exception) {
-				System.out.printf("%s\n", exception.getMessage());
+				System.out.printf("You must enter a valid card rank (example: three).\n");
 			}
 		}
 		System.out.println();

@@ -19,4 +19,5 @@ public class PlayArea extends GroupOfCards {
 
 		return onlyObject;
 	}
+
 }

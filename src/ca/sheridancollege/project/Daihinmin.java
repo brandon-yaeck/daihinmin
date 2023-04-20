@@ -102,8 +102,6 @@ public class Daihinmin extends Game {
 		while (true) {
 			currentPlayer = players.get(i);
 
-
-
 			// check for trick end if all players pass
 			if (passCount == players.size()) {
 				// last person to successfully play goes first in next trick
@@ -247,17 +245,17 @@ public class Daihinmin extends Game {
 			Hand daihinmin = players.get(players.size() - 1).getHand();
 
 
-			System.out.println("The daihinmin must give their best two cards to the daifugou as tax.");
+			System.out.printf("The daihinmin has given their two best cards to the daifugou as tax.\n\n");
 			daihinmin.swapCardsUp(daifugou, 2);
 
-			System.out.println("The daifugou must return 2 cards of choice.");
+			System.out.printf("The daifugou must return 2 cards of choice.\n");
 			daifugou.swapCardsDown(daihinmin, 2);
 
-			System.out.println("The hinmin must give their best card to the fugou as tax.");
+			System.out.printf("The hinmin has given their best card to the fugou as tax.\n\n");
 			hinmin.swapCardsUp(fugou, 1);
 
-			System.out.println("The fugou must return 1 card of choice.");
-			fugou.swapCardsDown(daihinmin, 1);
+			System.out.printf("The fugou must return 1 card of choice.\n");
+			fugou.swapCardsDown(hinmin, 1);
 		}
 	}
 

@@ -71,16 +71,7 @@ public class Player implements Comparable<Player> {
 		return hand;
 	}
 
-	/**
-	 * The method to be overridden when you subclass the Player class with your specific type of Player and filled in with logic to play your game.
-	 * 
-	 * @return Whether a card was played
-	 */
-	public boolean play(ArrayList<Card> playArea, int trickSize, Card.Rank lastCard) {
-		Scanner keyboard = new Scanner(System.in);
-
-
-
+	public boolean isPlayable(int trickSize, Card.Rank selection, Card.Rank lastCard) {
 		ArrayList<Card.Rank> selectedRanks;
 		switch (trickSize) {
 			case 4:
@@ -97,10 +88,27 @@ public class Player implements Comparable<Player> {
 				break;
 		}
 
+		if (!selectedRanks.contains(selection)) {
+			System.out.printf("%s is not available to play\n", selection);
+			return false;
+		} else if (lastCard != null && selection.value < lastCard.value) {
+			System.out.printf("%s is lower than the current cards in play\n", selection);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * The method to be overridden when you subclass the Player class with your specific type of Player and filled in with logic to play your game.
+	 * 
+	 * @return Whether a card was played
+	 */
+	public boolean play(ArrayList<Card> playArea, int trickSize, Card.Rank lastCard) {
+		Scanner keyboard = new Scanner(System.in);
+
 		System.out.printf("%d cards of the same rank must be played.\n", trickSize);
 		
-
-
 		while (true) {
 			System.out.printf("(%s) Enter card rank to play (or pass): ", name);
 			try {
@@ -110,32 +118,26 @@ public class Player implements Comparable<Player> {
 					return false;
 				} else {
 					Card.Rank selection = Card.Rank.valueOf(input);
-					if (selectedRanks.contains(selection)) {
-						if (playArea.isEmpty() || selection.value > lastCard.value) {
-							// find card in hand that matches
-							int matchAmount = 0;
-							for (Card card: hand.getCards()) {
-								if (card.checkMatch(selection)) {
-									playArea.add(card);
-									matchAmount++;	
-								}
-
-								// continue looping according to how many cards were played in order to find them all
-								// limit amount of cards played to trick size
-								if (matchAmount == trickSize) {
-									break;
-								}						
+					if (isPlayable(trickSize, selection, lastCard)) {
+						// find card in hand that matches
+						int matchAmount = 0;
+						for (Card card: hand.getCards()) {
+							if (card.checkMatch(selection)) {
+								playArea.add(card);
+								matchAmount++;	
 							}
-							// remove cards from hand if they are in the play area
-							// this only works with a single deck in use
-							hand.getCards().removeAll(playArea);
 
-							break;
-						} else {
-							System.out.printf("%s is lower than the current cards in play\n", selection);
+							// continue looping according to how many cards were played in order to find them all
+							// limit amount of cards played to trick size
+							if (matchAmount == trickSize) {
+								break;
+							}						
 						}
-					} else {
-						System.out.printf("%s is not available to play\n", selection);
+						// remove cards from hand if they are in the play area
+						// this only works with a single deck in use
+						hand.getCards().removeAll(playArea);
+
+						break;
 					}
 				}
 			}
